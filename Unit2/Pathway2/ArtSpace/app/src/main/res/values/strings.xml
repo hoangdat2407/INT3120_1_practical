@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Art Space</string>
+    <!-- Artwork titles -->
+    <string name="title1">Starry Night</string>
+    <string name="title2">The Scream</string>
+    <string name="title3">Mona Lisa</string>
+
+    <!-- Artwork artists -->
+    <string name="artist1">Vincent van Gogh, 1889</string>
+    <string name="artist2">Edvard Munch, 1893</string>
+    <string name="artist3">Leonardo da Vinci, 1503</string>
 </resources>
