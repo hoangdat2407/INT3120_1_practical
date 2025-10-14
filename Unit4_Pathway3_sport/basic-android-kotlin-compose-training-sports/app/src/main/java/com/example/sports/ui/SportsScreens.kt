@@ -92,6 +92,7 @@ fun SportsApp(
         topBar = {
             SportsAppBar(
                 isShowingListPage = uiState.isShowingListPage,
+                contentType = contentType,
                 onBackButtonClick = { viewModel.navigateToListPage() },
             )
         }
@@ -165,20 +166,18 @@ fun SportsApp(
 fun SportsAppBar(
     onBackButtonClick: () -> Unit,
     isShowingListPage: Boolean,
+    contentType: SportsContentType,
     modifier: Modifier = Modifier
 ) {
-    TopAppBar(
-        title = {
-            Text(
-                text =
-                if (!isShowingListPage) {
-                    stringResource(R.string.detail_fragment_label)
-                } else {
-                    stringResource(R.string.list_fragment_label)
-                }
-            )
-        },
-        navigationIcon = if (!isShowingListPage) {
+    val titleText = when {
+        contentType == SportsContentType.ListAndDetail -> "Sports"
+        !isShowingListPage -> stringResource(R.string.detail_fragment_label)
+        else -> stringResource(R.string.list_fragment_label)
+    }
+
+
+    val navigationIcon: @Composable (() -> Unit)? =
+        if (contentType == SportsContentType.ListOnly && !isShowingListPage) {
             {
                 IconButton(onClick = onBackButtonClick) {
                     Icon(
@@ -187,13 +186,15 @@ fun SportsAppBar(
                     )
                 }
             }
-        } else {
-            { Box {} }
-        },
+        } else null
+
+    TopAppBar(
+        title = { Text(titleText) },
+        navigationIcon = navigationIcon?:{},
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primary
         ),
-        modifier = modifier,
+        modifier = modifier
     )
 }
 
