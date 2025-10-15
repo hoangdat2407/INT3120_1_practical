@@ -8,5 +8,7 @@
     <string name="lemon_content">Lemon</string>
     <string name="lemonade_content">Glass of lemonade</string>
     <string name="glass_content">Empty glass</string>
+    <string name="ice_melted">Đá đã tan hết</string>
+    <string name="ice_melted_content">Ly nước chanh đã tan hoàn toàn.</string>
 
 </resources>
