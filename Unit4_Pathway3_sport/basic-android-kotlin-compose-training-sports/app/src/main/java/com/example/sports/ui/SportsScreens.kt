@@ -16,6 +16,13 @@
 
 package com.example.sports.ui
 
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -72,7 +79,9 @@ import com.example.sports.model.Sport
 import com.example.sports.ui.theme.SportsTheme
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import com.example.sports.utils.SportsContentType
-
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
 /**
  * Main composable that serves as container
  * which displays content according to [uiState] and [windowSize]
@@ -210,7 +219,8 @@ private fun SportsListItem(
         modifier = modifier,
         shape = RoundedCornerShape(dimensionResource(R.dimen.card_corner_radius)),
         onClick = { onItemClick(sport) }
-    ) {
+    )
+    {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -284,18 +294,69 @@ private fun SportsList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
-    LazyColumn(
-        contentPadding = contentPadding,
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-        modifier = modifier,
+    val showResult = remember { mutableStateOf(false) }
+    val viewModel: SportsViewModel = viewModel()
+    val totalCalories = viewModel.totalCaloriesBurned()
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(bottom = 80.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(sports, key = { sport -> sport.id }) { sport ->
-            SportsListItem(
-                sport = sport,
-                onItemClick = onClick
+
+        LazyColumn(
+            contentPadding = contentPadding,
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+        ) {
+            items(sports, key = { sport -> sport.id }) { sport ->
+                SportsListItem(
+                    sport = sport,
+                    onItemClick = onClick
+                )
+            }
+        }
+        Spacer(modifier = Modifier.size(12.dp))
+        Button(
+            onClick = { showResult.value = true },
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(0.9f)
+        ) {
+            Text(
+                text = "Tổng calo tiêu thụ một tuần",
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White
+            )
+        }
+        if (showResult.value) {
+            AlertDialog(
+                onDismissRequest = { showResult.value = false },
+                confirmButton = {
+                    TextButton(onClick = { showResult.value = false }) {
+                        Text("Đóng")
+                    }
+                },
+                title = {
+                    Text(
+                        "Tổng lượng calo tiêu thụ trong tuần",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
+                text = {
+                    Text(
+                        "Bạn đã tiêu thụ tổng cộng $totalCalories kcal trong tuần này!",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             )
         }
     }
+
 }
 
 @Composable
@@ -379,6 +440,46 @@ private fun SportsDetail(
                     vertical = dimensionResource(R.dimen.padding_detail_content_vertical),
                     horizontal = dimensionResource(R.dimen.padding_detail_content_horizontal)
                 )
+            )
+            val viewModel: SportsViewModel = viewModel()
+            val savedHours = viewModel.uiState.collectAsState().value.hoursPlayed[selectedSport.id] ?: 0
+            val hoursPerWeek = remember { mutableStateOf(savedHours.toString()) }
+            val hours = hoursPerWeek.value.toIntOrNull() ?: 0
+            val caloriesBurned = selectedSport.caloriesPerHour * hours
+
+            OutlinedTextField(
+                value = hoursPerWeek.value,
+                onValueChange = {
+                    hoursPerWeek.value = it
+                    val h = it.toIntOrNull() ?: 0
+                    viewModel.updateHoursPlayed(selectedSport.id, h)
+                },
+                label = { Text("Số giờ chơi mỗi tuần") },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                    unfocusedIndicatorColor = MaterialTheme.colorScheme.outline,
+                    focusedLabelColor = MaterialTheme.colorScheme.primary,
+                    unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
+                    cursorColor = MaterialTheme.colorScheme.primary
+                )
+            )
+
+
+
+
+            Text(
+                text = "Lượng calo tiêu thụ: $caloriesBurned kcal/tuần",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
         }
     }

@@ -30,5 +30,6 @@ data class Sport(
     val olympic: Boolean,
     @DrawableRes val imageResourceId: Int,
     @DrawableRes val sportsImageBanner: Int,
-    @StringRes val sportDetails: Int
+    @StringRes val sportDetails: Int,
+    val caloriesPerHour: Int
 )
