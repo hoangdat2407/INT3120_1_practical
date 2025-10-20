@@ -68,6 +68,15 @@
                 sport.caloriesPerHour * hours
             }
         }
+        fun clearSports() {
+            _uiState.update {
+                it.copy(
+                    sportsList = emptyList(),
+                    currentSport = LocalSportsDataProvider.defaultSport,
+                    hoursPlayed = emptyMap()
+                )
+            }
+        }
 
     }
 

@@ -82,6 +82,9 @@ import com.example.sports.utils.SportsContentType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.FabPosition
 /**
  * Main composable that serves as container
  * which displays content according to [uiState] and [windowSize]
@@ -104,7 +107,20 @@ fun SportsApp(
                 contentType = contentType,
                 onBackButtonClick = { viewModel.navigateToListPage() },
             )
-        }
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { viewModel.clearSports() },
+                containerColor = MaterialTheme.colorScheme.errorContainer,
+                contentColor = MaterialTheme.colorScheme.onErrorContainer
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Xóa toàn bộ danh sách"
+                )
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
     ) { innerPadding ->
         when (contentType) {
             SportsContentType.ListOnly ->
