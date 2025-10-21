@@ -20,7 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.marsphotos.network.MarsPhoto
+import com.example.marsphotos.model.MarsPhoto
 import com.example.marsphotos.network.MarsApi
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
