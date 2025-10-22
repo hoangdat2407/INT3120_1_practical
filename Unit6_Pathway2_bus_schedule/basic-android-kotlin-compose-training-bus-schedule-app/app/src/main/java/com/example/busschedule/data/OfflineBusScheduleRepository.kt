@@ -13,7 +13,7 @@ class OfflineBusScheduleRepository(private val BusScheduleDAO: BusScheduleDAO) :
     /**
      * Retrieve an BusSchedule from the given data source that matches with the [id].
      */
-    override fun getBusScheduleStream(stopName: String): Flow<BusSchedule?> = BusScheduleDAO.getBusScheduleStream(stopName)
+    override fun getBusScheduleStream(stopName: String): Flow<List<BusSchedule>> = BusScheduleDAO.getBusScheduleStream(stopName)
 
 
     /**

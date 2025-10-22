@@ -14,7 +14,7 @@ interface BusSchedulesRepository {
     /**
      * Retrieve an BusSchedule from the given data source that matches with the [id].
      */
-    fun getBusScheduleStream(stopName: String)
+    fun getBusScheduleStream(stopName: String): Flow<List<BusSchedule>>
 
     /**
      * Insert BusSchedule in the data source
