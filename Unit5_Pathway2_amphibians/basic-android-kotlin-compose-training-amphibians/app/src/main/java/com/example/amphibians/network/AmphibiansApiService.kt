@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package com.example.marsphotos.network
+package com.example.amphibians.network
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.example.amphibians.model.Amphibian
+import retrofit2.http.GET
 
-/**
- * This data class defines a Mars photo which includes an ID, and the image URL.
- */
-@Serializable
-data class MarsPhoto(
-    val id: String,
-    @SerialName(value = "img_src")
-    val imgSrc: String
-)
+interface AmphibiansApiService {
+    @GET("amphibians")
+    suspend fun getAmphibians(): List<Amphibian>
+}

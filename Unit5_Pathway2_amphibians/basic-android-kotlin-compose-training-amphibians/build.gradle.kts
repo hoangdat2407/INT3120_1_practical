@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.example.marsphotos.model
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+buildscript {
+    extra.apply {
+        set("lifecycle_version", "2.8.7")
+        set("retrofit2_version", "2.11.0")
+    }
+}
 
-@InternalSerializationApi /**
- * This data class defines a Mars photo which includes an ID, and the image URL.
- */
-@Serializable
-data class MarsPhoto(
-    val id: String,
-    @SerialName(value = "img_src")
-    val imgSrc: String
-)
+plugins {
+    id("com.android.application") version "8.8.0" apply false
+    id("com.android.library") version "8.8.0" apply false
+    id("org.jetbrains.kotlin.android") version "2.1.0" apply false
+    id("org.jetbrains.kotlin.plugin.compose") version "2.1.0" apply false
+}

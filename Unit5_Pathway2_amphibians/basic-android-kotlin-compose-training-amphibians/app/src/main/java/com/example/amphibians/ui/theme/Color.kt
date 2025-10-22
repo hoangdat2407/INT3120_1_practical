@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package com.example.marsphotos.model
+package com.example.amphibians.ui.theme
 
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import androidx.compose.ui.graphics.Color
 
-@InternalSerializationApi /**
- * This data class defines a Mars photo which includes an ID, and the image URL.
- */
-@Serializable
-data class MarsPhoto(
-    val id: String,
-    @SerialName(value = "img_src")
-    val imgSrc: String
-)
+val md_theme_light_background = Color(0xFFFCFDF6)
+val md_theme_light_surface = Color(0xFFFCFDF6)
+val md_theme_light_surfaceVariant = Color(0xFFDEE5D8)
+
+val md_theme_dark_background = Color(0xFF1A1C19)
+val md_theme_dark_surface = Color(0xFF1A1C19)
+val md_theme_dark_surfaceVariant = Color(0xFF424940)
