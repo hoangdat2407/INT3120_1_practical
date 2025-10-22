@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.stateIn
 /**
  * ViewModel to retrieve, update and delete an item from the [ItemsRepository]'s data source.
@@ -46,12 +47,33 @@ class ItemDetailsViewModel(
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = ItemDetailsUiState()
         )
+    fun sellItem() {
+        viewModelScope.launch {
+            val current = uiState.value.itemDetails.toItem()
+            if (current.quantity > 0) {
+                val updatedItem = current.copy(quantity = current.quantity - 1)
+                itemsRepository.updateItem(updatedItem)
+            }
+        }
+    }
+    fun deleteItem() {
+        viewModelScope.launch {
+            val current = uiState.value.itemDetails.toItem()
+            itemsRepository.deleteItem(current)
+        }
+    }
 }
 
 /**
  * UI state for ItemDetailsScreen
  */
+//data class ItemDetailsUiState(
+//    val outOfStock: Boolean = true,
+//    val itemDetails: ItemDetails = ItemDetails()
+//)
 data class ItemDetailsUiState(
-    val outOfStock: Boolean = true,
     val itemDetails: ItemDetails = ItemDetails()
-)
+) {
+    val outOfStock: Boolean
+        get() = (itemDetails.quantity.toIntOrNull() ?: 0) <= 0
+}
