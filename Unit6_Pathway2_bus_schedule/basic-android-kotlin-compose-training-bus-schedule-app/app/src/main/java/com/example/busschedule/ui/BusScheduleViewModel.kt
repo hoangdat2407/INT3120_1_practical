@@ -34,7 +34,7 @@ class BusScheduleViewModel( private val repository: BusSchedulesRepository): Vie
     fun getFullSchedule(): Flow<List<BusSchedule>> = repository.getAllBusSchedulesStream()
 
 
-    // Get example bus schedule by stop
+
     fun getScheduleFor(stopName: String): Flow<List<BusSchedule>> = repository.getBusScheduleStream(stopName)
 
     companion object {
@@ -42,7 +42,7 @@ class BusScheduleViewModel( private val repository: BusSchedulesRepository): Vie
             initializer {
                 val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application
 
-                // Tự tạo DB -> DAO -> Repository tại đây
+
                 val db = BusScheduleDatabase.getDatabase(app)
                 val dao = db.busScheduleDao()
                 val repo = OfflineBusScheduleRepository(dao)
