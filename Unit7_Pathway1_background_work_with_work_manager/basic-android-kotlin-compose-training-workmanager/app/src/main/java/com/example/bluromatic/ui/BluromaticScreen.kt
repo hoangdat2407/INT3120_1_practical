@@ -65,6 +65,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bluromatic.R
 import com.example.bluromatic.data.BlurAmount
 import com.example.bluromatic.ui.theme.BluromaticTheme
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+
+
 
 @Composable
 fun BluromaticScreen(blurViewModel: BlurViewModel = viewModel(factory = BlurViewModel.Factory)) {
@@ -121,7 +127,10 @@ fun BluromaticScreenContent(
         BlurActions(
             blurUiState = blurUiState,
             onStartClick = { applyBlur(selectedValue) },
-            onSeeFileClick = {},
+            onSeeFileClick = {
+                currentUri ->
+                showBlurredImage(context, currentUri)
+            },
             onCancelClick = { cancelWork() },
             modifier = Modifier.fillMaxWidth()
         )
@@ -140,11 +149,20 @@ private fun BlurActions(
         modifier = modifier,
         horizontalArrangement = Arrangement.Center
     ) {
-        Button(
-            onClick = onStartClick,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.start))
+        when (blurUiState) {
+            is BlurUiState.Default -> {
+                Button(onStartClick) { Text(stringResource(R.string.start)) }
+            }
+            is BlurUiState.Loading -> {
+                FilledTonalButton(onCancelClick) { Text(stringResource(R.string.cancel_work)) }
+                CircularProgressIndicator(modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)))
+            }
+            is BlurUiState.Complete -> {
+                Button(onStartClick) { Text(stringResource(R.string.start)) }
+                Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_small)))
+                FilledTonalButton({ onSeeFileClick(blurUiState.outputUri) })
+                { Text(stringResource(R.string.see_file)) }
+            }
         }
     }
 }

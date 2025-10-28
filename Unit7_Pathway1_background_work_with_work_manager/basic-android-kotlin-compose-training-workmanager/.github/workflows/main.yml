@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - starter
+      - intermediate
 
 jobs:
   build:
@@ -54,4 +55,3 @@ jobs:
         with:
           name: test-reports-${{ matrix.api-level }}
           path: ./app/build/reports/androidTests
-
