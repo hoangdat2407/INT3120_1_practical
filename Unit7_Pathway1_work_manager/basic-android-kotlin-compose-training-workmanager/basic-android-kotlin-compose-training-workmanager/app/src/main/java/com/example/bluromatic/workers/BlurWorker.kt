@@ -1,0 +1,57 @@
+package com.example.bluromatic.workers
+
+import androidx.work.CoroutineWorker
+import androidx.work.WorkerParameters
+import android.content.Context
+import com.example.bluromatic.R
+import android.graphics.BitmapFactory
+import android.util.Log
+import androidx.work.ListenableWorker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import com.example.bluromatic.DELAY_TIME_MILLIS
+import kotlinx.coroutines.delay
+
+private const val TAG = "BlurWorker"
+
+class BlurWorker(ctx: Context, params: WorkerParameters) : CoroutineWorker(ctx, params) {
+
+    override suspend fun doWork(): Result {
+
+        makeStatusNotification(
+            applicationContext.resources.getString(R.string.blurring_image),
+            applicationContext
+        )
+        makeStatusNotification(
+            applicationContext.resources.getString(R.string.blurring_image),
+            applicationContext
+        )
+        return withContext(Dispatchers.IO) {
+            delay(DELAY_TIME_MILLIS)
+            return@withContext try {
+                val picture = BitmapFactory.decodeResource(
+                    applicationContext.resources,
+                    R.drawable.android_cupcake
+                )
+                val output = blurBitmap(picture, 1)
+                val outputUri = writeBitmapToFile(applicationContext, output)
+                makeStatusNotification(
+                    "Output is $outputUri",
+                    applicationContext
+                )
+                ListenableWorker.Result.success()
+            } catch (throwable: Throwable) {
+                Log.e(
+                    TAG,
+                    applicationContext.resources.getString(R.string.error_applying_blur),
+                    throwable
+                )
+                ListenableWorker.Result.failure()
+            }
+        }
+
+    }
+}
+
+
+
