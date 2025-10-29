@@ -24,7 +24,7 @@ import com.example.juicetracker.JuiceTrackerApplication
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
-        // Initializer for ItemEntryViewModel
+        // Initializer for EntryViewModel
         initializer {
             EntryViewModel(juiceTrackerApplication().container.trackerRepository)
         }
@@ -34,6 +34,7 @@ object AppViewModelProvider {
         }
     }
 }
+
 /**
  * Extension function to query for [Application] object and returns an instance of
  * [JuiceTrackerApplication].
